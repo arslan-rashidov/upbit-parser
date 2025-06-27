@@ -9,8 +9,8 @@ from aiogram import Bot
 API_URL = "https://api-manager.upbit.com/api/v1/announcements"
 PARAMS = {"os": "web", "page": 1, "per_page": 20, "category": "all"}
 
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "YOUR_BOT_TOKEN")
-CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "YOUR_CHAT_ID")
+TOKEN =
+CHAT_ID =
 
 logging.basicConfig(
     filename="error.log",
@@ -21,7 +21,7 @@ logging.basicConfig(
 async def poll_news(bot: Bot) -> None:
     last_trade_id = None
     # Set to -3600 so the first "no news" message is sent immediately if needed
-    last_no_news = -3600.0
+    last_no_news = datetime.now()
     while True:
         try:
             resp = await asyncio.to_thread(requests.get, API_URL, params=PARAMS, timeout=10)
@@ -40,9 +40,9 @@ async def poll_news(bot: Bot) -> None:
                     f"Sent at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                 )
                 await bot.send_message(CHAT_ID, text)
-                last_no_news = asyncio.get_event_loop().time()
+                last_no_news = datetime.now()
             else:
-                now = asyncio.get_event_loop().time()
+                now = datetime.now()
                 if now - last_no_news >= 3600:
                     last_no_news = now
                     await bot.send_message(
